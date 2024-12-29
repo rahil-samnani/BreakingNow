@@ -31,6 +31,19 @@ export default class News extends Component {
         },
         {
             "source": {
+                "id": "the-american-conservative",
+                "name": "The American Conservative"
+            },
+            "author": null,
+            "title": "Politics Archives - The American Conservative",
+            "description": null,
+            "url": "https://www.theamericanconservative.com/category/politics/",
+            "urlToImage": null,
+            "publishedAt": "2022-07-07T21:37:27.3936289Z",
+            "content": null
+        },
+        {
+            "source": {
                 "id": "politico",
                 "name": "Politico"
             },
@@ -73,24 +86,33 @@ export default class News extends Component {
     constructor() {
         super();
         this.state = {
-            articles: this.articles
+            articles: this.articles,
+            loading : false
         }
+    }
+
+    async componentDidMount() {
+        let url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=aea85cba00cf4c1bab854b83e51ea692"
+        let data = await fetch(url)
+        let processed_data = await data.json()
+        this.setState({articles: processed_data.articles})
     }
 
     render() {
         return (
             <div className='container my-5'>
                 <h2 className='my-5' style={{ textAlign: "center" }}>Breaking Now- News Headlines</h2>
-                <div className="row">
+                <div className="row row-cols-4">
 
                     {this.state.articles.map((element) => {
                         return (
-                            <div className="col md-4">
-                                <NewsItem title={element.title} desc={element.description} imgUrl={element.urlToImage} url={element.url} />
+                            <div className="col" key={element.url}>
+                                <NewsItem title={element.title==null ? "No Title": element.title.slice(0,45)} 
+                                desc={element.description==null ? "No Description": element.description.slice(0,88)} 
+                                imgUrl={element.urlToImage} url={element.url} />
                             </div>
                         )
                     })}
-
                 </div>
             </div>
         )
