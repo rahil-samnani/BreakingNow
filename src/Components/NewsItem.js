@@ -9,7 +9,7 @@ export default class NewsItem extends Component {
 
         return (
             <div className={`card my-4 bg-${this.props.mode} text-${this.props.mode==="light"?"dark":"light"}`} style={{ width: "18rem" }}>
-                <span className="position-absolute  translate-middle badge rounded-pill bg-danger badge">{this.props.source}</span>
+                <div><span className="badge rounded-pill bg-danger badge">{this.props.source}</span></div>
                 <img src={imgsrc} className="card-img-top" alt="Failed to load" />
                 <div className="card-body">
                     <h5 className="card-title" style={{ height: "48px" }}>{this.props.title}...</h5>

@@ -15,7 +15,7 @@ export default function Navbar(props) {
               <Link className="nav-link  hoverable" aria-current="page" to="/">Home</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link  hoverable" aria-current="page" to="/">About us</Link>
+              <Link className="nav-link  hoverable" aria-current="page" to="/about">About us</Link>
             </li>
             <li className="nav-item dropdown">
               <Link className="nav-link dropdown-toggle" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,7 +32,7 @@ export default function Navbar(props) {
               </ul>
             </li>
           </ul>
-          <select className={`text-${props.mode==="light"?"dark":"light"} form-select my-2`} value={true} aria-label="Default select example" onChange={props.togglePagination} style={{ width: "150px", marginRight: "20px" , backgroundColor : `${props.mode==="light"?"#addfff":"#212529"}`}}>
+          <select className={`text-light form-select my-2`} value={true} aria-label="Default select example" onChange={props.togglePagination} style={{ width: "150px", marginRight: "20px" , backgroundColor : `${props.mode==="light"?"#3712A9":"#212529"}`}}>
             <option defaultValue={true} >Pagination</option>
             <option value={false} >Infinite Scroll</option>
           </select>

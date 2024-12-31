@@ -6,11 +6,9 @@ export default class Spinner extends Component {
 
     render() {
         return (
-            <div>
-                <div className="spinner text-center" style={{overflow : "hidden"}}>
-                    { this.props.small && <img className="spinnerSmall" src={smallSpinner} alt="spinner" />}
-                    { !this.props.small && <img className="spinnerLarge" src={spinner} alt="spinner" />}
-                </div>
+            <div className="spinner text-center" style={{ overflow: "hidden" }}>
+                {this.props.small && <img className="spinnerSmall" src={smallSpinner} alt="spinner" />}
+                {!this.props.small && <img className="spinnerLarge" src={spinner} alt="spinner" />}
             </div>
         )
     }

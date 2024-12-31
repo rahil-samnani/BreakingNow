@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
-import spinner from "./spinner.gif"
 import Spinner from './Spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -24,17 +23,22 @@ export default class News extends Component {
 
 
     async updateNews(pageno, pagesize) {
+        this.props.setProgress(8)
         let processed_data
         let apiKey = ["aadd759d4af848a1bd79258c2e819fb5", "9d0e16b6b8d243f884e999d9ee8774e3", "cbcb90dc14064d8c8390fb4058c9bd26", "aea85cba00cf4c1bab854b83e51ea692"]
-        this.setState({ spinner: true })
+        this.setState({ loading: true })
+        this.props.setProgress(25)
         for (let i = 0; i < apiKey.length; i++) {
+            this.props.setProgress(50 + i * 7)
             let url = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&apiKey=${apiKey[0]}&page=${pageno}&pageSize=${pagesize}`
             let data = await fetch(url)
             processed_data = await data.json()
             if (processed_data.status === "ok")
                 break;
         }
-        this.setState({ totalResults: processed_data.totalResults, spinner: false, articles: processed_data.articles, totalPages: Math.ceil(processed_data.totalResults / this.state.pageSize) })
+        this.props.setProgress(85)
+        this.setState({ totalResults: processed_data.totalResults, loading: false, articles: processed_data.articles, totalPages: Math.ceil(processed_data.totalResults / this.state.pageSize) })
+        this.props.setProgress(100)
     }
 
     async componentDidMount() {
@@ -85,7 +89,7 @@ export default class News extends Component {
             <>
                 {this.props.pagination && <div className='container my-5'>
                     <h2 className={`mgtop text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Top {this.capitalize(this.props.category)} Headlines</h2>
-                    <div className="d-flex flex-row-reverse my-2">
+                    {!this.state.loading && <div className="d-flex flex-row-reverse my-2">
                         <select value={20} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ width: "100px", marginRight: "20px" }}>
                             <option value={5}>5</option>
                             <option value={10}>10</option>
@@ -93,10 +97,8 @@ export default class News extends Component {
                             <option defaultValue={20}>20</option>
                         </select>
                         <p className={`mx-3 mb-0 mt-1 text-${this.props.mode === "light" ? "dark" : "light"}`}>No. of results per page</p>
-                    </div>
-                    {this.state.loading && <div className="spinner text-center">
-                        <img src={spinner} alt="spinner" />
                     </div>}
+                    {this.state.loading && <Spinner/>}
                     <div className="row">
                         {!this.state.loading && this.state.articles.map((element) => {
                             const uniqueKey = `${element.url}-${element.publishedAt}`;
@@ -110,10 +112,10 @@ export default class News extends Component {
                             )
                         })}
                     </div>
-                    <div className="d-flex justify-content-between my-5">
+                    {!this.state.loading && <div className="d-flex justify-content-between my-5">
                         <button disabled={this.state.page <= 1} type="button" className={`btn btn-${this.props.mode === "light" ? "primary" : "dark"}`} onClick={this.handlePreviousClick}>&larr; Previous</button>
                         <button disabled={this.state.page === this.state.totalPages} type="button" className={`btn btn-${this.props.mode === "light" ? "primary" : "dark"}`} onClick={this.handleNextClick}>Next &rarr;</button>
-                    </div>
+                    </div>}
                 </div>}
 
                 {!this.props.pagination && <div className='container my-5'>
