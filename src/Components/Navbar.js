@@ -1,9 +1,9 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-export default function Navbar() {
+export default function Navbar(props) {
   return (
-    <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <nav className={`navbar navbar-expand-lg bg-${props.mode === "light" ? "primary" : "dark"}`} data-bs-theme="dark">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">Breaking Now</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,23 +21,29 @@ export default function Navbar() {
               <Link className="nav-link dropdown-toggle" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Categories
               </Link>
-              <ul className="dropdown-menu bg-light text-primary">
-                <li><Link className="dropdown-item" to="/business">Business</Link></li>
-                <li><Link className="dropdown-item" to="/entertainment">Entertainment</Link></li>
-                <li><Link className="dropdown-item" to="/general">General</Link></li>
-                <li><Link className="dropdown-item" to="/health">Health</Link></li>
-                <li><Link className="dropdown-item" to="/science">Science</Link></li>
-                <li><Link className="dropdown-item" to="/sports">Sports</Link></li>
-                <li><Link className="dropdown-item" to="/technology">Technology</Link></li>
+              <ul className={`dropdown-menu bg-${props.mode}`}>
+                <li><Link className={`dropdown-item dropdown-item-${props.mode}`} to="/business">Business</Link></li>
+                <li><Link className={`dropdown-item dropdown-item-${props.mode}`} to="/entertainment">Entertainment</Link></li>
+                <li><Link className={`dropdown-item dropdown-item-${props.mode}`} to="/general">General</Link></li>
+                <li><Link className={`dropdown-item dropdown-item-${props.mode}`} to="/health">Health</Link></li>
+                <li><Link className={`dropdown-item dropdown-item-${props.mode}`} to="/science">Science</Link></li>
+                <li><Link className={`dropdown-item dropdown-item-${props.mode}`} to="/sports">Sports</Link></li>
+                <li><Link className={`dropdown-item dropdown-item-${props.mode}`} to="/technology">Technology</Link></li>
               </ul>
             </li>
           </ul>
-
-
-          <form className="d-flex">
-            <input className="form-control me-2 bg-primary search" type="search" placeholder="Search" aria-label="Search" />
-            <button className="btn btn-outline-light" type="submit">Search</button>
-          </form>
+          <select className={`text-${props.mode==="light"?"dark":"light"} form-select my-2`} aria-label="Default select example" onChange={props.togglePagination} style={{ width: "150px", marginRight: "20px" , backgroundColor : `${props.mode==="light"?"#addfff":"#212529"}`}}>
+            <option defaultValue="pagination" >Pagination</option>
+            <option value="2" >Infinite Scroll</option>
+          </select>
+          <div className='mx-1'>
+            <input type="checkbox" className="checkbox" id="checkbox" onChange={props.toggleMode} />
+            <label htmlFor="checkbox" className="checkbox-label">
+              <i className="fas fa-moon"></i>
+              <i className="fas fa-sun"></i>
+              <span className="ball"></span>
+            </label>
+          </div>
         </div>
       </div>
     </nav>
