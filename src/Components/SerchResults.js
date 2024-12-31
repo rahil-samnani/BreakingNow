@@ -1,27 +1,19 @@
 import React, { Component } from 'react'
+import Spinner from './Spinner'
 import NewsItem from './NewsItem'
-import Spinner from './Spinner';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import Search from './Search';
+import InfiniteScroll from 'react-infinite-scroll-component'
 
-export default class News extends Component {
+export default class SerchResults extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             articles: [],
-            spinner: false,
+            totalResults: 0,
+            loading: false,
             page: 1,
-            totalPages: undefined,
-            pageSize: 20,
-            totalResults: 0
+            pageSize: 20
         }
     }
-
-    capitalize(str) {
-        if (str.length === 0) return str;
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
 
     async updateNews(pageno, pagesize) {
         this.props.setProgress(8)
@@ -31,7 +23,7 @@ export default class News extends Component {
         this.props.setProgress(25)
         for (let i = 0; i < apiKey.length; i++) {
             this.props.setProgress(50 + i * 5)
-            let url = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&apiKey=${apiKey[i]}&page=${pageno}&pageSize=${pagesize}`
+            let url = `https://newsapi.org/v2/everything?q=${this.props.query}&apiKey=${apiKey[i]}&page=${this.state.page}&pageSize=${this.state.pageSize}`
             let data = await fetch(url)
             processed_data = await data.json()
             if (processed_data.status === "ok")
@@ -72,7 +64,7 @@ export default class News extends Component {
         let processed_data
         let apiKey = ["aadd759d4af848a1bd79258c2e819fb5", "9d0e16b6b8d243f884e999d9ee8774e3", "cbcb90dc14064d8c8390fb4058c9bd26", "aea85cba00cf4c1bab854b83e51ea692","fdb9ec4618ed4689abd38fb84bd9491e"]
         for (let i = 0; i < apiKey.length; i++) {
-            let url = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&apiKey=${apiKey[i]}&page=${this.state.page + 1}&pageSize=${this.state.pageSize}`
+            let url = `https://newsapi.org/v2/everything?q=${this.props.query}&apiKey=${apiKey[i]}&page=${this.state.page + 1}&pageSize=${this.state.pageSize}`
             let data = await fetch(url)
             processed_data = await data.json()
             if (processed_data.status === "ok")
@@ -83,24 +75,22 @@ export default class News extends Component {
             articles: this.state.articles.concat(processed_data.articles),
             totalResults: processed_data.totalResults
         })
-        console.log(this.state.articles.length , this.state.totalResults)
     };
 
     render() {
         return (
             <>
-                <h2 className={`mgtop mb-4 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Top {this.capitalize(this.props.category)} Headlines</h2>
                 {this.props.pagination && <div className='container my-5'>
+                    <h2 className={`mgtop mb-4 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Results for <i>"{this.props.query}"</i></h2>
                     {!this.state.loading && <div className='d-flex flex-column'>
-                        <Search SetQuery={this.props.SetQuery} mode={this.props.mode}/>
                         <div className="d-flex flex-row-reverse my-2">
-                            <select value={20} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ height: "40px", width: "100px", marginRight: "20px" }}>
+                            <select value={this.state.pageSize} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ height: "40px", width: "100px", marginRight: "20px" }}>
                                 <option value={5}>5</option>
                                 <option value={10}>10</option>
                                 <option value={15}>15</option>
                                 <option defaultValue={20}>20</option>
                             </select>
-                            <p className={`text-${this.props.mode === "light" ? "dark" : "light"}`} style={{margin : "7px 12px"}}>no. of results per page</p>
+                            <p className={`text-${this.props.mode === "light" ? "dark" : "light"}`} style={{ margin: "7px 12px" }}>no. of results per page</p>
                         </div>
                     </div>}
                     {this.state.loading && <Spinner />}
@@ -121,38 +111,37 @@ export default class News extends Component {
                         <button disabled={this.state.page <= 1} type="button" className={`btn btn-${this.props.mode === "light" ? "primary" : "dark"}`} onClick={this.handlePreviousClick}>&larr; Previous</button>
                         <button disabled={this.state.page === this.state.totalPages} type="button" className={`btn btn-${this.props.mode === "light" ? "primary" : "dark"}`} onClick={this.handleNextClick}>Next &rarr;</button>
                     </div>}
-                </div>}
+                </div>
+                }
 
-                {!this.props.pagination && <div className='container my-5'>    
+
+
+                {!this.props.pagination && <div className='container my-5'>
+                    <h2 className={`mgtop mb-4 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Results for <i>"{this.props.query}"</i></h2>
                     {this.state.loading && <Spinner />}
-                    <div className="container">
-                    {!this.state.loading &&<InfiniteScroll
-                            dataLength={this.state.articles.length}
-                            next={this.fetchMoreData}
-                            hasMore={this.state.articles.length !== this.state.totalResults}
-                            loader={<Spinner small={true} />}
-                        >
-                            <Search SetQuery={this.props.SetQuery} mode={this.props.mode}/>
-                            <div className="container" style={{ overflowX: "hidden" }}>
-                                <div className="row">
-                                    {this.state.articles.map((element) => {
-                                        const uniqueKey = `${element.title}-${element.description}-${element.url}-${element.publishedAt}`;
-                                        return (
-                                            <div className="col" key={uniqueKey}>
-                                                <NewsItem title={element.title == null ? "No Title" : element.title.slice(0, 40)}
-                                                    desc={element.description == null ? "No Description" : element.description.slice(0, 88)}
-                                                    imgUrl={element.urlToImage} url={element.url} source={element.source.name}
-                                                    author={element.author} dateTime={element.publishedAt} mode={this.props.mode} />
-                                            </div>
-                                        )
-                                    })}
-                                </div>
+                    <InfiniteScroll
+                        dataLength={this.state.articles.length}
+                        next={this.fetchMoreData}
+                        hasMore={this.state.articles.length !== this.state.totalResults}
+                        loader={<Spinner small={true} />}
+                    >
+                        <div className="container" style={{ overflowX: "hidden" }}>
+                            <div className="row">
+                                {!this.state.loading && this.state.articles.map((element) => {
+                                    const uniqueKey = `${element.url}-${element.publishedAt}`;
+                                    return (
+                                        <div className="col" key={uniqueKey}>
+                                            <NewsItem title={element.title == null ? "No Title" : element.title.slice(0, 40)}
+                                                desc={element.description == null ? "No Description" : element.description.slice(0, 88)}
+                                                imgUrl={element.urlToImage} url={element.url} source={element.source.name}
+                                                author={element.author} dateTime={element.publishedAt} mode={this.props.mode} />
+                                        </div>
+                                    )
+                                })}
                             </div>
-                        </InfiniteScroll>}
-                    </div>
+                        </div>
+                    </InfiniteScroll>
                 </div>}
-
-
             </>
         )
     }

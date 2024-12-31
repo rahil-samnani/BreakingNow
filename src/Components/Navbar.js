@@ -32,10 +32,8 @@ export default function Navbar(props) {
               </ul>
             </li>
           </ul>
-          <select className={`text-light form-select my-2`} value={true} aria-label="Default select example" onChange={props.togglePagination} style={{ width: "150px", marginRight: "20px" , backgroundColor : `${props.mode==="light"?"#3712A9":"#212529"}`}}>
-            <option defaultValue={true} >Pagination</option>
-            <option value={false} >Infinite Scroll</option>
-          </select>
+          <input type="checkbox" className="btn-check mx-2" id="btn-check-2-outlined"  onChange={props.togglePagination}/>
+          <label className={`btn mx-2 btn-outline-${props.mode==="light"?"light":"info"}`} htmlFor="btn-check-2-outlined">Infinite Scroll</label><br />
           <div className='mx-1'>
             <input type="checkbox" className="checkbox" id="checkbox" onChange={props.toggleMode} />
             <label htmlFor="checkbox" className="checkbox-label">

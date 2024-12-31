@@ -77,7 +77,7 @@ nav {
   align-items: center;
 }
 .fa-moon {
-  color: #f1c40f;
+  color: #f39c12;
 }
 .fa-sun {
   color: #f39c12;
@@ -95,7 +95,6 @@ nav {
 .checkbox:checked + .checkbox-label .ball {
   transform: translateX(24px);
 }
-/*  Support me if you like it */
 .support {
   position: absolute;
   right: 20px;
@@ -254,4 +253,47 @@ nav {
   .contentRight .content h2 {
     font-size: 30px;
   }
+}
+
+/* Search css*/
+.barra {
+  width: 100%;
+  position: relative
+}
+.buscar-light{
+  margin-bottom: 1.5rem;
+  float: left;
+  width: 100%;
+  border: 3px solid #007bff;
+  padding: 18px;
+  height: 34px;
+  border-radius: 25px;
+  outline: none;
+  color: black;
+}
+.buscar-dark{
+  margin-bottom: 1.5rem;
+  float: left;
+  width: 100%;
+  border: 3px solid #16778C;
+  padding: 18px;
+  height: 34px;
+  border-radius: 25px;
+  outline: none;
+  color: white;
+  background-color: #181818;
+}
+
+.search_icon{
+  position: absolute;
+  top: 13px;
+  right: 16px;
+  width: 20px;
+  height: 36px;
+  text-align: center;
+  color: #007bff;
+  font-size: 15px;
+}
+.wrap{
+  width: 100%;
 }

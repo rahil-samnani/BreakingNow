@@ -14,7 +14,7 @@ export default class NewsItem extends Component {
                 <div className="card-body">
                     <h5 className="card-title" style={{ height: "48px" }}>{this.props.title}...</h5>
                     <p className="card-text" style={{ height: "88px" }}>{this.props.desc}...</p>
-                    <p className="card-text" style={{ height: "48px" }}><small className="text-body-secondary">By {!this.props.author?"Unkown":this.props.author} at {new Date(this.props.dateTime).toUTCString()}</small></p>
+                    <p className="card-text" style={{ height: "48px" }}><small className={`text-body-${this.props.mode==="light"?"secondary":"info"}`}>By {!this.props.author?"Unkown":this.props.author} at {new Date(this.props.dateTime).toUTCString()}</small></p>
                     <a href={this.props.url} rel="noreferrer" target='_blank' className={`btn btn-sm btn-${this.props.mode==="light"?"primary":"secondary"}`}>Read more</a>
                 </div>
             </div>
