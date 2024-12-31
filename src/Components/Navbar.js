@@ -33,7 +33,7 @@ export default function Navbar(props) {
             </li>
           </ul>
           <input type="checkbox" className="btn-check mx-2" id="btn-check-2-outlined"  onChange={props.togglePagination}/>
-          <label className={`btn mx-2 btn-outline-${props.mode==="light"?"light":"info"}`} htmlFor="btn-check-2-outlined">Infinite Scroll</label><br />
+          <label className={`btn m-2 btn-outline-${props.mode==="light"?"light":"info"}`} htmlFor="btn-check-2-outlined">Infinite Scroll</label><br />
           <div className='mx-1'>
             <input type="checkbox" className="checkbox" id="checkbox" onChange={props.toggleMode} />
             <label htmlFor="checkbox" className="checkbox-label">

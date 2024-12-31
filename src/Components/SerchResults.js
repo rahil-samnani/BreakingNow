@@ -11,7 +11,9 @@ export default class SerchResults extends Component {
             totalResults: 0,
             loading: false,
             page: 1,
-            pageSize: 20
+            pageSize: 20,
+            noResults: undefined,
+            totalPages: undefined
         }
     }
 
@@ -30,7 +32,18 @@ export default class SerchResults extends Component {
                 break;
         }
         this.props.setProgress(85)
-        this.setState({ totalResults: processed_data.totalResults, loading: false, articles: processed_data.articles, totalPages: Math.ceil(processed_data.totalResults / this.state.pageSize) })
+        if(processed_data.status === "error" || processed_data.totalResults===0){
+            this.setState({ noResults: true })
+            this.props.setProgress(100)
+            return
+        }
+        this.setState({
+            page: this.state.page + 1,
+            articles: processed_data.articles,
+            totalResults: processed_data.totalResults,
+            loading: false,
+            totalPages: Math.ceil(processed_data.totalResults / this.state.pageSize)
+        })
         this.props.setProgress(100)
     }
 
@@ -62,7 +75,7 @@ export default class SerchResults extends Component {
 
     fetchMoreData = async () => {
         let processed_data
-        let apiKey = ["aadd759d4af848a1bd79258c2e819fb5", "9d0e16b6b8d243f884e999d9ee8774e3", "cbcb90dc14064d8c8390fb4058c9bd26", "aea85cba00cf4c1bab854b83e51ea692","fdb9ec4618ed4689abd38fb84bd9491e"]
+        let apiKey = ["aadd759d4af848a1bd79258c2e819fb5", "9d0e16b6b8d243f884e999d9ee8774e3", "cbcb90dc14064d8c8390fb4058c9bd26", "aea85cba00cf4c1bab854b83e51ea692", "fdb9ec4618ed4689abd38fb84bd9491e"]
         for (let i = 0; i < apiKey.length; i++) {
             let url = `https://newsapi.org/v2/everything?q=${this.props.query}&apiKey=${apiKey[i]}&page=${this.state.page + 1}&pageSize=${this.state.pageSize}`
             let data = await fetch(url)
@@ -71,7 +84,7 @@ export default class SerchResults extends Component {
                 break;
         }
         this.setState({
-            page: this.state.page + 1 ,
+            page: this.state.page + 1,
             articles: this.state.articles.concat(processed_data.articles),
             totalResults: processed_data.totalResults
         })
@@ -80,8 +93,8 @@ export default class SerchResults extends Component {
     render() {
         return (
             <>
-                {this.props.pagination && <div className='container my-5'>
-                    <h2 className={`mgtop mb-4 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Results for <i>"{this.props.query}"</i></h2>
+                <h2 className={`mgtop mb-4 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Results for <i>"{this.props.query}"</i></h2>
+                {this.props.pagination && !this.state.noResults && <div className='container my-5'>
                     {!this.state.loading && <div className='d-flex flex-column'>
                         <div className="d-flex flex-row-reverse my-2">
                             <select value={this.state.pageSize} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ height: "40px", width: "100px", marginRight: "20px" }}>
@@ -111,13 +124,9 @@ export default class SerchResults extends Component {
                         <button disabled={this.state.page <= 1} type="button" className={`btn btn-${this.props.mode === "light" ? "primary" : "dark"}`} onClick={this.handlePreviousClick}>&larr; Previous</button>
                         <button disabled={this.state.page === this.state.totalPages} type="button" className={`btn btn-${this.props.mode === "light" ? "primary" : "dark"}`} onClick={this.handleNextClick}>Next &rarr;</button>
                     </div>}
-                </div>
-                }
+                </div>}
 
-
-
-                {!this.props.pagination && <div className='container my-5'>
-                    <h2 className={`mgtop mb-4 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Results for <i>"{this.props.query}"</i></h2>
+                {!this.props.pagination && !this.state.noResults && <div className='container my-5'>
                     {this.state.loading && <Spinner />}
                     <InfiniteScroll
                         dataLength={this.state.articles.length}
@@ -141,6 +150,17 @@ export default class SerchResults extends Component {
                             </div>
                         </div>
                     </InfiniteScroll>
+                </div>}
+
+                {this.state.noResults && <div class=" container my-5">
+                    <div class="content">
+                        <div class="browser-bar">
+                            <span class="close button"></span>
+                            <span class="min button"></span>
+                            <span class="max button"></span>
+                        </div>
+                        <div class="text-light">404 Not Found</div>
+                    </div>
                 </div>}
             </>
         )
