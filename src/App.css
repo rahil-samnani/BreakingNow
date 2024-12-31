@@ -44,6 +44,9 @@ nav {
   height: 450px;
 }
 
+.mgtop{
+  margin-top: 6rem;
+}
 
 /*dark mode toggle button*/
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");

@@ -78,20 +78,19 @@ export default class News extends Component {
             articles: this.state.articles.concat(processed_data.articles),
             totalResults: processed_data.totalResults
         })
-        console.log(this.state.totalResults,this.state.articles.length)
     };
 
     render() {
         return (
             <>
                 {this.props.pagination && <div className='container my-5'>
-                    <h2 className={`my-5 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Top {this.capitalize(this.props.category)} Headlines</h2>
+                    <h2 className={`mgtop text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Top {this.capitalize(this.props.category)} Headlines</h2>
                     <div className="d-flex flex-row-reverse my-2">
-                        <select className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ width: "100px", marginRight: "20px" }}>
-                            <option value='5'>5</option>
-                            <option value='10'>10</option>
-                            <option value='15'>15</option>
-                            <option selected defaultValue='20'>20</option>
+                        <select value={20} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ width: "100px", marginRight: "20px" }}>
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={15}>15</option>
+                            <option defaultValue={20}>20</option>
                         </select>
                         <p className={`mx-3 mb-0 mt-1 text-${this.props.mode === "light" ? "dark" : "light"}`}>No. of results per page</p>
                     </div>
@@ -118,7 +117,7 @@ export default class News extends Component {
                 </div>}
 
                 {!this.props.pagination && <div className='container my-5'>
-                    <h2 className={`my-5 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Top {this.capitalize(this.props.category)} Headlines</h2>
+                    <h2 className={`mgtop text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Top {this.capitalize(this.props.category)} Headlines</h2>
                     {this.state.loading && <Spinner />}
                     <div className="container">
                         <InfiniteScroll
