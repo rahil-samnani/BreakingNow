@@ -112,7 +112,7 @@ export default class News extends Component {
                                     <NewsItem title={element.title == null ? "No Title" : element.title.slice(0, 40)}
                                         desc={element.description == null ? "No Description" : element.description.slice(0, 88)}
                                         imgUrl={element.urlToImage} url={element.url} source={element.source.name}
-                                        author={element.author} dateTime={element.publishedAt} mode={this.props.mode} />
+                                        author={element.author} dateTime={element.publishedAt.slice(0,64)} mode={this.props.mode} />
                                 </div>
                             )
                         })}
@@ -142,7 +142,7 @@ export default class News extends Component {
                                                 <NewsItem title={element.title == null ? "No Title" : element.title.slice(0, 40)}
                                                     desc={element.description == null ? "No Description" : element.description.slice(0, 88)}
                                                     imgUrl={element.urlToImage} url={element.url} source={element.source.name}
-                                                    author={element.author} dateTime={element.publishedAt} mode={this.props.mode} />
+                                                    author={element.author} dateTime={element.publishedAt.slice(0,64)} mode={this.props.mode} />
                                             </div>
                                         )
                                     })}

@@ -13,7 +13,8 @@ export default class SerchResults extends Component {
             page: 1,
             pageSize: 20,
             noResults: undefined,
-            totalPages: undefined
+            totalPages: undefined,
+            searchSortBy : "publishedAt"
         }
     }
 
@@ -25,12 +26,13 @@ export default class SerchResults extends Component {
         this.props.setProgress(25)
         for (let i = 0; i < apiKey.length; i++) {
             this.props.setProgress(50 + i * 5)
-            let url = `https://newsapi.org/v2/everything?q=${this.props.query}&apiKey=${apiKey[i]}&page=${this.state.page}&pageSize=${this.state.pageSize}`
+            let url = `https://newsapi.org/v2/everything?q=${this.props.query}&sortBy=${this.state.searchSortBy}&language=en&apiKey=${apiKey[i]}&page=${this.state.page}&pageSize=${this.state.pageSize}`
             let data = await fetch(url)
             processed_data = await data.json()
             if (processed_data.status === "ok")
                 break;
         }
+        console.log(this.state.searchSortBy)
         this.props.setProgress(85)
         if(processed_data.status === "error" || processed_data.totalResults===0){
             this.setState({ noResults: true })
@@ -73,6 +75,12 @@ export default class SerchResults extends Component {
         this.updateNews(this.state.page, value)
     }
 
+    handlesearchSortByChange = async (event) => {
+        let value = event.target.value;
+        this.setState({ searchSortBy: value })
+        this.updateNews(this.state.page,value)
+    }
+
     fetchMoreData = async () => {
         let processed_data
         let apiKey = ["aadd759d4af848a1bd79258c2e819fb5", "9d0e16b6b8d243f884e999d9ee8774e3", "cbcb90dc14064d8c8390fb4058c9bd26", "aea85cba00cf4c1bab854b83e51ea692", "fdb9ec4618ed4689abd38fb84bd9491e"]
@@ -96,14 +104,24 @@ export default class SerchResults extends Component {
                 <h2 className={`mgtop mb-4 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Results for <i>"{this.props.query}"</i></h2>
                 {this.props.pagination && !this.state.noResults && <div className='container my-5'>
                     {!this.state.loading && <div className='d-flex flex-column'>
-                        <div className="d-flex flex-row-reverse my-2">
-                            <select value={this.state.pageSize} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ height: "40px", width: "100px", marginRight: "20px" }}>
+                        <div className="d-flex flex-row-reverse my-2 flex-wrap" style={{justifyContent: "space-between"}}>
+                           <div className='d-flex flex-row-reverse flex-wrap'>
+                           <select value={this.state.pageSize} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ height: "40px", width: "100px", marginRight: "20px" }}>
                                 <option value={5}>5</option>
                                 <option value={10}>10</option>
                                 <option value={15}>15</option>
                                 <option defaultValue={20}>20</option>
                             </select>
                             <p className={`text-${this.props.mode === "light" ? "dark" : "light"}`} style={{ margin: "7px 12px" }}>no. of results per page</p>
+                           </div>
+                           <div className='d-flex flex-row-reverse flex-wrap my-2'>
+                           <select value={this.state.searchSortBy} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlesearchSortByChange} style={{ height: "40px", width: "130px", marginRight: "20px" }}>
+                                <option value="popularity">Popularity</option>
+                                <option value="relevancy">Relevancy</option>
+                                <option defaultValue="publishedAt">Published At</option>
+                            </select>
+                            <p className={`text-${this.props.mode === "light" ? "dark" : "light"}`} style={{ margin: "7px 12px" }}>Sort by</p>
+                           </div>
                         </div>
                     </div>}
                     {this.state.loading && <Spinner />}
