@@ -14,7 +14,7 @@ export default class SerchResults extends Component {
             pageSize: 20,
             noResults: undefined,
             totalPages: undefined,
-            searchSortBy : "publishedAt"
+            searchSortBy: "publishedAt"
         }
     }
 
@@ -34,7 +34,7 @@ export default class SerchResults extends Component {
         }
         console.log(this.state.searchSortBy)
         this.props.setProgress(85)
-        if(processed_data.status === "error" || processed_data.totalResults===0){
+        if (processed_data.status === "error" || processed_data.totalResults === 0) {
             this.setState({ noResults: true })
             this.props.setProgress(100)
             return
@@ -78,7 +78,7 @@ export default class SerchResults extends Component {
     handlesearchSortByChange = async (event) => {
         let value = event.target.value;
         this.setState({ searchSortBy: value })
-        this.updateNews(this.state.page,value)
+        this.updateNews(this.state.page, value)
     }
 
     fetchMoreData = async () => {
@@ -104,24 +104,24 @@ export default class SerchResults extends Component {
                 <h2 className={`mgtop mb-4 text-center text-${this.props.mode === "light" ? "dark" : "light"}`}>Breaking Now - Results for <i>"{this.props.query}"</i></h2>
                 {this.props.pagination && !this.state.noResults && <div className='container my-5'>
                     {!this.state.loading && <div className='d-flex flex-column'>
-                        <div className="d-flex flex-row-reverse my-2 flex-wrap" style={{justifyContent: "space-between"}}>
-                           <div className='d-flex flex-row-reverse flex-wrap'>
-                           <select value={this.state.pageSize} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ height: "40px", width: "100px", marginRight: "20px" }}>
-                                <option value={5}>5</option>
-                                <option value={10}>10</option>
-                                <option value={15}>15</option>
-                                <option defaultValue={20}>20</option>
-                            </select>
-                            <p className={`text-${this.props.mode === "light" ? "dark" : "light"}`} style={{ margin: "7px 12px" }}>no. of results per page</p>
-                           </div>
-                           <div className='d-flex flex-row-reverse flex-wrap my-2'>
-                           <select value={this.state.searchSortBy} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlesearchSortByChange} style={{ height: "40px", width: "130px", marginRight: "20px" }}>
-                                <option value="popularity">Popularity</option>
-                                <option value="relevancy">Relevancy</option>
-                                <option defaultValue="publishedAt">Published At</option>
-                            </select>
-                            <p className={`text-${this.props.mode === "light" ? "dark" : "light"}`} style={{ margin: "7px 12px" }}>Sort by</p>
-                           </div>
+                        <div className="d-flex flex-row-reverse my-2 flex-wrap" style={{ justifyContent: "space-between" }}>
+                            <div className='d-flex flex-row-reverse flex-wrap'>
+                                <select value={this.state.pageSize} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlePageSizeChange} style={{ height: "40px", width: "100px", marginRight: "20px" }}>
+                                    <option value={5}>5</option>
+                                    <option value={10}>10</option>
+                                    <option value={15}>15</option>
+                                    <option defaultValue={20}>20</option>
+                                </select>
+                                <p className={`text-${this.props.mode === "light" ? "dark" : "light"}`} style={{ margin: "7px 12px" }}>no. of results per page</p>
+                            </div>
+                            <div className='d-flex flex-row-reverse flex-wrap my-2'>
+                                <select value={this.state.searchSortBy} className={`form-select text-${this.props.mode === "light" ? "dark" : "light"} bg-${this.props.mode}`} id='pageSizeSelect' aria-label="Default select example" onChange={this.handlesearchSortByChange} style={{ height: "40px", width: "130px", marginRight: "20px" }}>
+                                    <option value="popularity">Popularity</option>
+                                    <option value="relevancy">Relevancy</option>
+                                    <option defaultValue="publishedAt">Published At</option>
+                                </select>
+                                <p className={`text-${this.props.mode === "light" ? "dark" : "light"}`} style={{ margin: "7px 12px" }}>Sort by</p>
+                            </div>
                         </div>
                     </div>}
                     {this.state.loading && <Spinner />}
